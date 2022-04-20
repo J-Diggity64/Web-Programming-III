@@ -1,0 +1,216 @@
+*index.html*
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"Finish that Quote!"</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="question-display" class="hide">
+            <div id="question">Question</div>
+            <div id="answers" class="buttons">
+                <button class="button">Answer 1</button>
+                <button class="button">Answer 2</button>
+                <button class="button">Answer 3</button>
+                <button class="button">Answer 4</button>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="start" class="start btn">Start</button>
+            <button id="next" class="next btn hide">Next</button>
+        </div>
+    </div>
+</body>
+</html>
+
+*style.css*
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+:root {
+    --hue-neutral: 200;
+    --hue-incorrect: 0;
+    --hue-correct: 120;
+}
+
+body {
+    --hue: var(--hue-neutral);
+    padding: 0;
+    margin: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: hsl(var(--hue));
+}
+
+body.correct {
+    --hue: var(--hue-correct);
+}
+
+body.incorrect {
+    --hue: var(--hue-incorrect);
+}
+
+.container {
+    width: 800px;
+    max-width: 80%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px 2px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.button {
+    --hue: var(--hue-neutral);
+    border: 1px solid hsl(var(--hue), 100%, 30%);
+    background-color: hsl(var(--hue), 100%, 50%);
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    outline: none;
+}
+
+.button:hover {
+    border-color: black;
+}
+
+.button.correct {
+    --hue: var(--hue-correct);
+    color: black;
+}
+
+.button.incorrect {
+    --hue: var(--hue-incorrect);
+}
+
+.start, .next {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hide {
+    display: none;
+}
+
+*script.js*
+const startElement = document.getElementById('start')
+const nextElement = document.getElementById('next')
+const containerElement = document.getElementById('question-display')
+const questionElement = document.getElementById('question')
+const answerElement = document.getElementById('answers')
+
+let shuffledQuestions, currentQuestionIndex
+
+startElement.addEventListener('click', quizStart)
+nextElement.addEventListener('click', () => {
+    currentQuestionIndex++
+    NextQuestion()
+})
+
+function quizStart() {
+    console.log('The program is functioning normally')
+    startElement.classList.add('hide')
+    shuffledQuestions = questions.sort(() => Math.random() - .5)
+    currentQuestionIndex = 0
+    containerElement.classList.remove('hide')
+    NextQuestion()
+}
+
+function NextQuestion() {
+    retryQuiz()
+    showQuestion(shuffledQuestions[currentQuestionIndex])
+}
+
+function showQuestion(question) {
+    questionElement.innerText = question.question
+    question.answers.forEach(answer => {
+        const button = document.createElement('button')
+        button.innerText = answer.text
+        button.classList.add('button')
+        if (answer.correct) {
+            button.dataset.correct = answer.correct
+        }
+        button.addEventListener('click', selectAnswer)
+        answerElement.appendChild(button)
+    })
+}
+function retryQuiz() {
+    clearStatusClass(document.body)
+    nextElement.classList.add('hide')
+    while (answerElement.firstChild) {
+        answerElement.removeChild(answerElement.firstChild)
+    }
+}
+
+function selectAnswer(e) {
+    const selectedButton = e.target
+    const correct = selectedButton.dataset.correct
+    setStatusClass(document.body, correct)
+    Array.from(answerElement.children).forEach(button => {
+        setStatusClass(button, button.dataset.correct)
+    })
+    if (shuffledQuestions.length > currentQuestionIndex + 1) {
+        nextElement.classList.remove('hide')
+    } else {
+        startElement.innerText = 'Try Again'
+        startElement.classList.remove('hide')
+    }
+}
+
+function setStatusClass(element, correct) {
+    clearStatusClass(element)
+    if (correct) {
+        element.classList.add('correct')
+    } else {
+        element.classList.add('incorrect')
+    }
+}
+
+function clearStatusClass(element) {
+    element.classList.remove('correct')
+    element.classList.remove('incorrect')
+}
+
+const questions = [
+    {
+        question: '"Bears, Beats, _!"',
+        answers: [
+            {text: 'Bats', correct: false},
+            {text: 'Battlestar Galactica', correct: true},
+            {text: 'Bazinga', correct: false},
+            {text: 'Birds', correct: false}
+        ]
+    },
+    {
+        question: '"Youre so far past the line, _!"',
+        answers: [
+            {text: 'that you cant even see the line, the line is a dot to you', correct: true},
+            {text: 'that there may as well be no line to begin with', correct: false},
+            {text: 'that you passed every other line ahead of that line', correct: false},
+            {text: 'that if there was a loud sound at that line, you wouldnt have heard it', correct: false}
+        ]
+    }
+]
