@@ -11,8 +11,13 @@
 </head>
 <body>
     <div class="container">
+        <center><img id="photo" src="TitleCard.png" alt="Title" width="515.1" height="297"></center>
+        <center><div id="description">Welcome to "Finish that Quote!", the quiz game where every question
+            is a famous quote from a beloved sitcom. There will be a blank space in the quote, and
+            you just need to figure out the correct answer to fill in the missing blank.</div></center>
         <div id="question-display" class="hide">
-            <div id="question">Question</div>
+            <h2><div id="question">Question</div></h2>
+            <div id="source">Source</div>
             <div id="answers" class="buttons">
                 <button class="button">Answer 1</button>
                 <button class="button">Answer 2</button>
@@ -71,9 +76,9 @@ body.incorrect {
 
 .buttons {
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: repeat(1, auto);
     gap: 10px;
-    margin: 20px 0;
+    margin: 20px 10px;
 }
 
 .button {
@@ -81,9 +86,10 @@ body.incorrect {
     border: 1px solid hsl(var(--hue), 100%, 30%);
     background-color: hsl(var(--hue), 100%, 50%);
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 10px 10px;
     color: white;
     outline: none;
+    font-size: 15px;
 }
 
 .button:hover {
@@ -100,7 +106,7 @@ body.incorrect {
 }
 
 .start, .next {
-    font-size: 1.5rem;
+    font-size: 20px;
     font-weight: bold;
     padding: 10px 20px;
 }
@@ -121,6 +127,7 @@ const nextElement = document.getElementById('next')
 const containerElement = document.getElementById('question-display')
 const questionElement = document.getElementById('question')
 const answerElement = document.getElementById('answers')
+const sourceElement = document.getElementById('source')
 
 let shuffledQuestions, currentQuestionIndex
 
@@ -131,7 +138,7 @@ nextElement.addEventListener('click', () => {
 })
 
 function quizStart() {
-    console.log('The program is functioning normally')
+    console.log('We were on a break!')
     startElement.classList.add('hide')
     shuffledQuestions = questions.sort(() => Math.random() - .5)
     currentQuestionIndex = 0
@@ -146,6 +153,7 @@ function NextQuestion() {
 
 function showQuestion(question) {
     questionElement.innerText = question.question
+    sourceElement.innerText = question.source
     question.answers.forEach(answer => {
         const button = document.createElement('button')
         button.innerText = answer.text
@@ -196,7 +204,8 @@ function clearStatusClass(element) {
 
 const questions = [
     {
-        question: '"Bears, Beats, _!"',
+        question: '"Bears, Beats, ___!"',
+        source: 'Source: The Office, Courtesy of NBCUniversal and Comcast',
         answers: [
             {text: 'Bats', correct: false},
             {text: 'Battlestar Galactica', correct: true},
@@ -205,12 +214,73 @@ const questions = [
         ]
     },
     {
-        question: '"Youre so far past the line, _!"',
+        question: '"You’re so far past the line, ___!"',
+        source: 'Source: Friends, Courtesy of WarnerMedia and AT&T',
         answers: [
-            {text: 'that you cant even see the line, the line is a dot to you', correct: true},
+            {text: 'that you can’t even see the line, the line is a dot to you', correct: true},
             {text: 'that there may as well be no line to begin with', correct: false},
             {text: 'that you passed every other line ahead of that line', correct: false},
-            {text: 'that if there was a loud sound at that line, you wouldnt have heard it', correct: false}
+            {text: 'that if there was a loud sound at that line, you wouldn’t have heard it', correct: false}
+        ]
+    },
+    {
+        question: '"If every instinct you have is wrong, then ___."',
+        source: 'Source: Seinfeld, Courtesy of Sony',
+        answers: [
+            {text: 'just don’t listen to your instinct', correct: false},
+            {text: 'you don’t deserve to have an instinct', correct: false},
+            {text: 'the opposite, would have to be right', correct: true},
+            {text: 'it could be possible that everybody’s instincts are always wrong', correct: false}
+        ]
+    },
+    {
+        question: '"I grew up with Monica. If you didn’t eat ___, you didn’t eat!"',
+        source: 'Source: Friends, Courtesy of WarnerMedia and AT&T',
+        answers: [
+            {text: 'like a pig', correct: false},
+            {text: 'with your hands', correct: false},
+            {text: '7 meals a day', correct: false},
+            {text: 'fast', correct: true}
+        ]
+    },
+    {
+        question: '"Well, I got to buy a vowel, because ___."',
+        source: 'Source: Friends, Courtesy of WarnerMedia and AT&T',
+        answers: [
+            {text: 'U are so sweet', correct: false},
+            {text: 'I appreciate this', correct: false},
+            {text: 'O my god', correct: true},
+            {text: 'this is A for amazing', correct: false}
+        ]
+    },
+    {
+        question: '"We’re all pathetic and creepy, and can’t get girls. That’s why we ___."',
+        source: 'Source: The Big Bang Theory, Courtesy of WarnerMedia and AT&T',
+        answers: [
+            {text: 'build our own girlfriends', correct: false},
+            {text: 'fight robots', correct: true},
+            {text: 'turn to books about magic', correct: false},
+            {text: 'have extra space in our beds', correct: false}
+        ]
+    },
+    {
+        question: '"The minute they got rid of ___, everything went to hell."',
+        source: 'Source: Modern Family, Courtesy of 20th Television and Disney',
+        answers: [
+            {text: 'my favorite flavor of Ben & Jerry’s', correct: false},
+            {text: 'the roundabout on I-95', correct: false},
+            {text: '$500 bills', correct: false},
+            {text: 'rotary phones', correct: true}
+        ]
+    },
+    {
+        question: '"My past is divided between ___ and you’re both."',
+        source: 'Source: Two and a Half Men, Courtesy of WarnerMedia and AT&T',
+        answers: [
+            {text: 'things that make me puke and things that make it hard for me to', correct: false},
+            {text: 'things that keep me up at night and things that put me to sleep', correct: false},
+            {text: 'things I can’t remember and things I don’t want to', correct: true},
+            {text: 'things that messed up my childhood and things that are messing up my adulthood', correct: false}
         ]
     }
 ]
